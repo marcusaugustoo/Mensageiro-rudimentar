@@ -44,7 +44,7 @@ static void do_register(int sock, char* apelido, char* nome) {
 
 static void do_login(User** current_user, int sock, char* apelido) {
     if (*current_user) {
-        send_to_socket(sock, "ERROR BAD_STATE\n"); // Já logado
+        send_to_socket(sock, "ERROR BAD_STATE\n"); //Já logado
         return;
     }
     int user_idx = find_user(apelido);
@@ -55,9 +55,8 @@ static void do_login(User** current_user, int sock, char* apelido) {
     } else {
         //Loga o usuário
         *current_user = &users[user_idx];
-        (*current_user)->socket_fd = sock; // Armazena sessão
+        (*current_user)->socket_fd = sock; //Armazena sessão
         printf("Usuario logado: %s (socket_fd=%d)\n", (*current_user)->apelido, sock);
-        send_to_socket(sock, "OK\n");
 
         //Envia mensagens da fila (store-and-forward)
         MessageQueue* q = &(*current_user)->queue;
@@ -68,6 +67,8 @@ static void do_login(User** current_user, int sock, char* apelido) {
             send_to_socket(sock, msg_buffer);
         }
         q->count = 0; 
+
+        send_to_socket(sock, "OK\n");
     }
 }
 
@@ -133,6 +134,10 @@ static void do_delete(User** current_user, int sock, char* apelido) {
     } else if (strcmp((*current_user)->apelido, apelido) != 0) {
         send_to_socket(sock, "ERROR UNAUTHORIZED\n"); //Só pode deletar a si mesmo
     } else {
+        //guarda o nome antes de deletar
+        char nome_deletado[MAX_NICK];
+        strcpy(nome_deletado, (*current_user)->apelido);
+        
         int user_idx = find_user(apelido);
         users[user_idx] = users[user_count - 1];
         user_count--;
@@ -181,7 +186,7 @@ void handle_connection(int client_sock) {
             } else if (strcmp(command, "DELETE") == 0) {
                 sscanf(p, "%s", arg1);
             } else if (strcmp(command, "SEND_MSG") == 0) {
-                sscanf(p, "%s", arg1); // <to>
+                sscanf(p, "%s", arg1); 
                 char* msg_text = strchr(p, ' ');
                 if (msg_text && (msg_text + 1) < (p + strlen(p))) {
                     strncpy(arg2, msg_text + 1, sizeof(arg2) - 1);
@@ -196,13 +201,13 @@ void handle_connection(int client_sock) {
         else if (strcmp(command, "LOGIN") == 0) {
             do_login(&current_user, client_sock, arg1); //Passa o endereço do ponteiro
         }
-        else if (strcmp(command, "LIST\n") == 0) {
+        else if (strcmp(command, "LIST") == 0) {
             do_list(client_sock);
         }
         else if (strcmp(command, "SEND_MSG") == 0) {
             do_send_msg(current_user, client_sock, arg1, arg2);
         }
-        else if (strcmp(command, "LOGOUT\n") == 0) {
+        else if (strcmp(command, "LOGOUT") == 0) {
             do_logout(&current_user, client_sock); //Passa o endereço do ponteiro
         }
         else if (strcmp(command, "DELETE") == 0) {
