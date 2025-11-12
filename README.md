@@ -91,7 +91,7 @@ Após conectar com `./cliente`, os seguintes comandos estão disponíveis:
 | register <apelido> "<Nome Completo>" | Cadastra um novo usuário | register marcus "Marcus Madureira" |
 | login <apelido> | Faz login no sistema | login marcus |
 | list | Lista os usuários online e offline | list |
-| msg <apelido_dest> <texto...> | Envia mensagem para outro usuário | msg clara Oi, tudo bem? |
+| msg <apelido_dest> <texto...> | Envia mensagem para outro usuário | msg ana Oi, tudo bem? |
 | logout | Encerra a sessão do usuário atual | logout |
 | delete <apelido> | Deleta o próprio usuário | delete marcus |
 | quit | Fecha o cliente | quit |
