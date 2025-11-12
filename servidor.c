@@ -64,7 +64,7 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    printf("Servidor Mensageiro (Multithread) escutando na porta %d...\n", SERVER_PORT);
+    printf("Servidor escutando na porta %d...\n", SERVER_PORT);
 
     //5. Loop principal (Aceitar e Lidar com clientes)
     while (1) {

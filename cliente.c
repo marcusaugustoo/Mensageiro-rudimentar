@@ -54,9 +54,7 @@ int read_line(int sock, char* buffer, int size) {
 
 //Lógica do Cliente
 
-/*Esta é a função da THREAD RECEPTORA.
-Fica em loop lendo do servidor e imprimindo na tela.
- */
+//Esta é a função da THREAD RECEPTORA. Fica em loop lendo do servidor e imprimindo na tela.
 void* receiver_thread(void* arg) {
     int server_sock = *(int*)arg;
     char buffer[MAX_BUFFER];
@@ -77,9 +75,7 @@ void* receiver_thread(void* arg) {
     return NULL;
 }
 
-/*
-Analisa o comando do usuário (CLI) e formata para o protocolo do servidor.
- */
+//Analisa o comando do usuário e formata para o protocolo do servidor.
 int parse_and_send(int server_sock, char* cli_input) {
     char protocol_buffer[MAX_BUFFER]; 
     char command[32];
@@ -142,7 +138,6 @@ int parse_and_send(int server_sock, char* cli_input) {
 
 
 //Função Main
-
 int main() {
     int server_sock;
     struct sockaddr_in server_addr;
